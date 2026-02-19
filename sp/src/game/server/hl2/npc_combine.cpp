@@ -284,6 +284,7 @@ void CNPC_Combine::Precache()
 	PrecacheScriptSound( "NPC_Combine.GrenadeLaunch" );
 	PrecacheScriptSound( "NPC_Combine.WeaponBash" );
 	PrecacheScriptSound( "Weapon_CombineGuard.Special1" );
+	PrecacheScriptSound("Weapon_SMG1.Double"); // SMG1 Alt-Fire sound
 
 	BaseClass::Precache();
 }
@@ -378,7 +379,7 @@ void CNPC_Combine::PostNPCInit()
 		// an AR2. 
 		if( !GetActiveWeapon() || !FClassnameIs( GetActiveWeapon(), "weapon_ar2" ) )
 		{
-			DevWarning("**Combine Elite Soldier MUST be equipped with AR2\n");
+			//DevWarning("**Combine Elite Soldier MUST be equipped with AR2\n");
 		}
 	}
 
@@ -2318,9 +2319,21 @@ void CNPC_Combine::HandleAnimEvent( animevent_t *pEvent )
 
 	if (pEvent->type & AE_TYPE_NEWEVENTSYSTEM)
 	{
-		if ( pEvent->event == COMBINE_AE_BEGIN_ALTFIRE )
+		if (pEvent->event == COMBINE_AE_BEGIN_ALTFIRE)
 		{
-			EmitSound( "Weapon_CombineGuard.Special1" );
+			//We want it to use different sounds depending on the weapon
+			if (FClassnameIs(GetActiveWeapon(), "weapon_ar2"))
+			{
+				EmitSound("Weapon_CombineGuard.Special1");
+			}
+			else if (FClassnameIs(GetActiveWeapon(), "weapon_smg1"))
+			{
+				EmitSound("Weapon_SMG1.Double");
+			}
+			else
+			{
+				EmitSound("Weapon_CombineGuard.Special1"); // We let this play by default
+			}
 			handledEvent = true;
 		}
 		else if ( pEvent->event == COMBINE_AE_ALTFIRE )

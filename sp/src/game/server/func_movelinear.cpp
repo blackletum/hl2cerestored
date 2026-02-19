@@ -38,7 +38,10 @@ BEGIN_DATADESC( CFuncMoveLinear )
 	DEFINE_FIELD( m_currentSound, FIELD_SOUNDNAME ),
 	DEFINE_KEYFIELD( m_flBlockDamage,	 FIELD_FLOAT,	"BlockDamage"),
 	DEFINE_KEYFIELD( m_flStartPosition, FIELD_FLOAT,	"StartPosition"),
-	DEFINE_KEYFIELD( m_flMoveDistance,  FIELD_FLOAT,	"MoveDistance"),
+	DEFINE_KEYFIELD(m_flMoveDistance, FIELD_FLOAT, "MoveDistance"),
+#ifdef SDK2013CE
+	DEFINE_FIELD(m_vecReference, FIELD_VECTOR),
+#endif
 //	DEFINE_PHYSPTR( m_pFluidController ),
 
 	// Inputs
@@ -84,9 +87,16 @@ void CFuncMoveLinear::Spawn( void )
 		m_flMoveDistance = DotProductAbs( m_vecMoveDir, vecOBB ) - m_flLip;
 	}
 
+#ifdef SDK2013CE
+	m_vecPosition1 = GetLocalOrigin() - (m_vecMoveDir * m_flMoveDistance * m_flStartPosition);
+	m_vecPosition2 = m_vecPosition1 + (m_vecMoveDir * m_flMoveDistance);
+	m_vecFinalDest = GetLocalOrigin();
+	m_vecReference = GetLocalOrigin();
+#else
 	m_vecPosition1 = GetAbsOrigin() - (m_vecMoveDir * m_flMoveDistance * m_flStartPosition);
 	m_vecPosition2 = m_vecPosition1 + (m_vecMoveDir * m_flMoveDistance);
 	m_vecFinalDest = GetAbsOrigin();
+#endif
 
 	SetTouch( NULL );
 
@@ -115,6 +125,30 @@ bool CFuncMoveLinear::ShouldSavePhysics( void )
 	return !FClassnameIs( this, "func_water_analog" );
 		
 }
+
+#ifdef SDK2013CE
+//-----------------------------------------------------------------------------
+// Purpose: Sets the movement parent of this entity. This entity will be moved
+//			to a local coordinate calculated from its current absolute offset
+//			from the parent entity and will then follow the parent entity.
+// Input  : pParentEntity - This entity's new parent in the movement hierarchy.
+//-----------------------------------------------------------------------------
+void CFuncMoveLinear::SetParent(CBaseEntity* pParentEntity, int iAttachment)
+{
+	Vector oldLocal = GetLocalOrigin();
+
+	BaseClass::SetParent(pParentEntity, iAttachment);
+
+	// SOLID_NONE indicates we haven't spawned yet
+	if (GetSolid() != SOLID_NONE)
+	{
+		m_vecReference = ((m_vecReference - oldLocal) + GetLocalOrigin());
+		m_vecPosition1 = m_vecReference - (m_vecMoveDir * m_flMoveDistance * m_flStartPosition);
+		m_vecPosition2 = m_vecPosition1 + (m_vecMoveDir * m_flMoveDistance);
+		m_vecFinalDest = m_vecReference - m_vecFinalDest;
+	}
+}
+#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -256,14 +290,25 @@ void CFuncMoveLinear::MoveDone( void )
 	SetNextThink( gpGlobals->curtime + 0.1f );
 	BaseClass::MoveDone();
 
-	if ( GetAbsOrigin() == m_vecPosition2 )
+#ifdef SDK2013CE
+	if (GetLocalOrigin() == m_vecPosition2)
 	{
-		m_OnFullyOpen.FireOutput( this, this );
+		m_OnFullyOpen.FireOutput(this, this);
 	}
-	else if ( GetAbsOrigin() == m_vecPosition1 )
+	else if (GetLocalOrigin() == m_vecPosition1)
 	{
-		m_OnFullyClosed.FireOutput( this, this );
+		m_OnFullyClosed.FireOutput(this, this);
 	}
+#else
+	if (GetAbsOrigin() == m_vecPosition2)
+	{
+		m_OnFullyOpen.FireOutput(this, this);
+	}
+	else if (GetAbsOrigin() == m_vecPosition1)
+	{
+		m_OnFullyClosed.FireOutput(this, this);
+	}
+#endif
 }
 
 

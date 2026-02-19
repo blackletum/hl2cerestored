@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\GitHub\\hl2cerestored\\sp\\src\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F01B37EF-3E7B-2466-5DB8-DA5641CAB74A}|game\\server\\server_sdk2013ce.vcxproj|C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\func_movelinear.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{F01B37EF-3E7B-2466-5DB8-DA5641CAB74A}|game\\server\\server_sdk2013ce.vcxproj|solutionrelative:game\\server\\func_movelinear.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F01B37EF-3E7B-2466-5DB8-DA5641CAB74A}|game\\server\\server_sdk2013ce.vcxproj|C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\func_movelinear.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{F01B37EF-3E7B-2466-5DB8-DA5641CAB74A}|game\\server\\server_sdk2013ce.vcxproj|solutionrelative:game\\server\\func_movelinear.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "func_movelinear.h",
+              "DocumentMoniker": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\func_movelinear.h",
+              "RelativeDocumentMoniker": "game\\server\\func_movelinear.h",
+              "ToolTip": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\func_movelinear.h",
+              "RelativeToolTip": "game\\server\\func_movelinear.h",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAcwD8AAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-02-19T23:27:21.38Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "func_movelinear.cpp",
+              "DocumentMoniker": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\func_movelinear.cpp",
+              "RelativeDocumentMoniker": "game\\server\\func_movelinear.cpp",
+              "ToolTip": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\func_movelinear.cpp",
+              "RelativeToolTip": "game\\server\\func_movelinear.cpp",
+              "ViewState": "AgIAAHkAAAAAAAAAAAAswJYAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-19T23:27:19.253Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

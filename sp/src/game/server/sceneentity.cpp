@@ -70,6 +70,11 @@ static int  speechListIndex = 0;
 #define SCENE_MIN_PITCH	0.25f
 #define SCENE_MAX_PITCH 2.5f
 
+// New macros introduced for Mapbase's console message color changes.
+#define ChoreoMsg( lvl, msg ) 					DevMsg( lvl, msg )
+#define ChoreoMsg1( lvl, msg, a ) 				DevMsg( lvl, msg, a )
+#define ChoreoMsg2( lvl, msg, a, b ) 			DevMsg( lvl, msg, a, b )
+
 //===========================================================================================================
 // SCENE LIST MANAGER
 //===========================================================================================================
@@ -3343,45 +3348,85 @@ bool CSceneEntity::ShouldNetwork() const
 	return false;
 }
 
-CChoreoScene *CSceneEntity::LoadScene( const char *filename, IChoreoEventCallback *pCallback )
+CChoreoScene* CSceneEntity::LoadScene(const char* filename, IChoreoEventCallback* pCallback)
 {
-	DevMsg( 2, "Blocking load of scene from '%s'\n", filename );
+	ChoreoMsg1(2, "Blocking load of scene from '%s'\n", filename);
 
 	char loadfile[MAX_PATH];
-	Q_strncpy( loadfile, filename, sizeof( loadfile ) );
-	Q_SetExtension( loadfile, ".vcd", sizeof( loadfile ) );
-	Q_FixSlashes( loadfile );
+	Q_strncpy(loadfile, filename, sizeof(loadfile));
+	Q_SetExtension(loadfile, ".vcd", sizeof(loadfile));
+	Q_FixSlashes(loadfile);
 
 	// binary compiled vcd
-	void *pBuffer;
+	void* pBuffer = NULL;
+#ifdef SDK2013CE
+	// 
+	// Raw scene file support
+	// 
+	CChoreoScene* pScene;
 	int fileSize;
-	if ( !CopySceneFileIntoMemory( loadfile, &pBuffer, &fileSize ) )
+
+	// First, check if it's in scenes.image...
+	if (CopySceneFileIntoMemory(loadfile, &pBuffer, &fileSize))
 	{
-		MissingSceneWarning( loadfile );
+		pScene = new CChoreoScene(NULL);
+		CUtlBuffer buf(pBuffer, fileSize, CUtlBuffer::READ_ONLY);
+		if (!pScene->RestoreFromBinaryBuffer(buf, loadfile, &g_ChoreoStringPool))
+		{
+			Warning("CSceneEntity::LoadScene: Unable to load binary scene '%s'\n", loadfile);
+			delete pScene;
+			pScene = NULL;
+		}
+	}
+	// Next, check if it's a loose file...
+	else if (filesystem->ReadFileEx(loadfile, "MOD", &pBuffer, true))
+	{
+		g_TokenProcessor.SetBuffer((char*)pBuffer);
+		pScene = ChoreoLoadScene(loadfile, NULL, &g_TokenProcessor, LocalScene_Printf);
+		g_TokenProcessor.SetBuffer(NULL);
+	}
+	// Okay, it's definitely missing.
+	else
+	{
+		MissingSceneWarning(loadfile);
+		pScene = NULL;
+	}
+
+	if (pScene)
+	{
+		pScene->SetPrintFunc(LocalScene_Printf);
+		pScene->SetEventCallbackInterface(pCallback);
+	}
+#else
+	int fileSize;
+	if (!CopySceneFileIntoMemory(loadfile, &pBuffer, &fileSize))
+	{
+		MissingSceneWarning(loadfile);
 		return NULL;
 	}
 
-	CChoreoScene *pScene = new CChoreoScene( NULL );
-	CUtlBuffer buf( pBuffer, fileSize, CUtlBuffer::READ_ONLY );
-	if ( !pScene->RestoreFromBinaryBuffer( buf, loadfile, &g_ChoreoStringPool ) )
+	CChoreoScene* pScene = new CChoreoScene(NULL);
+	CUtlBuffer buf(pBuffer, fileSize, CUtlBuffer::READ_ONLY);
+	if (!pScene->RestoreFromBinaryBuffer(buf, loadfile, &g_ChoreoStringPool))
 	{
-		Warning( "CSceneEntity::LoadScene: Unable to load binary scene '%s'\n", loadfile );
+		Warning("CSceneEntity::LoadScene: Unable to load binary scene '%s'\n", loadfile);
 		delete pScene;
 		pScene = NULL;
 	}
 	else
 	{
-		pScene->SetPrintFunc( LocalScene_Printf );
-		pScene->SetEventCallbackInterface( pCallback );
+		pScene->SetPrintFunc(LocalScene_Printf);
+		pScene->SetEventCallbackInterface(pCallback);
 	}
+#endif
 
-	FreeSceneFileMemory( pBuffer );
+	FreeSceneFileMemory(pBuffer);
 	return pScene;
 }
 
-CChoreoScene *BlockingLoadScene( const char *filename )
+CChoreoScene* BlockingLoadScene(const char* filename)
 {
-	return CSceneEntity::LoadScene( filename, NULL );
+	return CSceneEntity::LoadScene(filename, NULL);
 }
 
 //-----------------------------------------------------------------------------
