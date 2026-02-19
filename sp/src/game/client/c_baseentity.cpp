@@ -3771,9 +3771,6 @@ bool C_BaseEntity::SnatchModelInstance( C_BaseEntity *pToEntity )
 	if ( !modelrender->ChangeInstance(  GetModelInstance(), pToEntity ) )
 		return false;  // engine could move modle handle
 
-	// remove stale shadow data
-	shadowmgr->RemoveAllShadowsFromModel( handle );
-
 	// remove old handle from toentity if any
 	if ( pToEntity->GetModelInstance() != MODEL_INSTANCE_INVALID )
 		 pToEntity->DestroyModelInstance();

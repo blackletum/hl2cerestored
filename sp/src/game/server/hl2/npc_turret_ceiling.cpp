@@ -671,7 +671,6 @@ void CNPC_CeilingTurret::ActiveThink( void )
 		//Fire the gun
 		if ( DotProduct( vecDirToEnemy, vecMuzzleDir ) >= 0.9848 ) // 10 degree slop
 		{
-			ResetActivity()
 			if ( m_spawnflags & SF_CEILING_TURRET_OUT_OF_AMMO )
 			{
 				SetActivity( (Activity) ACT_CEILING_TURRET_DRYFIRE );

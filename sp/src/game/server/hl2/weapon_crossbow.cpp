@@ -4,7 +4,6 @@
 //
 //=============================================================================//
 
-#include "func_break.h"
 #include "cbase.h"
 #include "npcevent.h"
 #include "basehlcombatweapon_shared.h"
@@ -255,12 +254,6 @@ void CCrossbowBolt::BoltTouch( CBaseEntity *pOther )
 		//Adrian: keep going through the glass.
 		if ( pOther->GetCollisionGroup() == COLLISION_GROUP_BREAKABLE_GLASS )
 			 return;
-		if ( FClassnameIs(pOther, "func_breakable") )
-{
-    CBreakable* pOtherEntity = static_cast<CBreakable*>( pOther );
-    if ( pOtherEntity->GetMaterialType() == matGlass )
-        return;
-}
 
 		if ( !pOther->IsAlive() )
 		{
