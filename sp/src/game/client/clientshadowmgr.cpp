@@ -81,10 +81,6 @@
 #include "toolframework_client.h"
 #include "bonetoworldarray.h"
 #include "cmodel.h"
-
-// ----------
-// Additions.
-// ----------
 #include "debugoverlay_shared.h"
 #include "worldlight.h"
 

@@ -5,6 +5,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{250680C8-D8F0-D2D6-2B3E-AB2A1E90DE08}|game\\client\\client_sdk2013ce.vcxproj|C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\clientshadowmgr.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{250680C8-D8F0-D2D6-2B3E-AB2A1E90DE08}|game\\client\\client_sdk2013ce.vcxproj|solutionrelative:game\\client\\clientshadowmgr.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{250680C8-D8F0-D2D6-2B3E-AB2A1E90DE08}|game\\client\\client_sdk2013ce.vcxproj|C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\worldlight.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{250680C8-D8F0-D2D6-2B3E-AB2A1E90DE08}|game\\client\\client_sdk2013ce.vcxproj|solutionrelative:game\\client\\worldlight.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{250680C8-D8F0-D2D6-2B3E-AB2A1E90DE08}|game\\client\\client_sdk2013ce.vcxproj|C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\worldlight.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{250680C8-D8F0-D2D6-2B3E-AB2A1E90DE08}|game\\client\\client_sdk2013ce.vcxproj|solutionrelative:game\\client\\worldlight.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,8 +22,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "worldlight.h",
+              "DocumentMoniker": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\worldlight.h",
+              "RelativeDocumentMoniker": "game\\client\\worldlight.h",
+              "ToolTip": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\worldlight.h",
+              "RelativeToolTip": "game\\client\\worldlight.h",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAcwBcAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-02-20T23:31:11.326Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "worldlight.cpp",
+              "DocumentMoniker": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\worldlight.cpp",
+              "RelativeDocumentMoniker": "game\\client\\worldlight.cpp",
+              "ToolTip": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\worldlight.cpp",
+              "RelativeToolTip": "game\\client\\worldlight.cpp",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAcwGAAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-20T23:30:23.876Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -24,7 +58,7 @@
               "RelativeDocumentMoniker": "game\\client\\clientshadowmgr.cpp",
               "ToolTip": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\clientshadowmgr.cpp",
               "RelativeToolTip": "game\\client\\clientshadowmgr.cpp",
-              "ViewState": "AgIAADERAAAAAAAAAAAswDgRAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAAAFIAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-02-20T00:09:20.838Z",
               "EditorCaption": ""
