@@ -270,6 +270,7 @@ exit 1
     <ClInclude Include="materialpatch.h" />
     <ClInclude Include="materialsub.h" />
     <ClInclude Include="..\common\scratchpad_helpers.h" />
+    <ClInclude Include="matrixinvert.h" />
     <ClInclude Include="vbsp.h" />
     <ClInclude Include="worldvertextransitionfixup.h" />
     <ClInclude Include="writebsp.h" />

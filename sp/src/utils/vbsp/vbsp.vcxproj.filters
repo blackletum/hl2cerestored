@@ -275,6 +275,9 @@
     <ClInclude Include="..\common\tools_minidump.h">
       <Filter>Source Files\Common Files</Filter>
     </ClInclude>
+    <ClInclude Include="matrixinvert.h">
+      <Filter>Public Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="boundbox.cpp">
@@ -446,7 +449,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="notes.txt">
-      <Filter></Filter>
+      <Filter>
+      </Filter>
     </None>
     <None Include="..\..\vpc_scripts\loadaddress.vpc">
       <Filter>VPC Scripts</Filter>

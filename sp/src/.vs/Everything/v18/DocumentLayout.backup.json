@@ -1,37 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\GitHub\\hl2cerestored\\sp\\src\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{250680C8-D8F0-D2D6-2B3E-AB2A1E90DE08}|game\\client\\client_sdk2013ce.vcxproj|C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\clientshadowmgr.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{250680C8-D8F0-D2D6-2B3E-AB2A1E90DE08}|game\\client\\client_sdk2013ce.vcxproj|solutionrelative:game\\client\\clientshadowmgr.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "clientshadowmgr.cpp",
-              "DocumentMoniker": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\clientshadowmgr.cpp",
-              "RelativeDocumentMoniker": "game\\client\\clientshadowmgr.cpp",
-              "ToolTip": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\clientshadowmgr.cpp",
-              "RelativeToolTip": "game\\client\\clientshadowmgr.cpp",
-              "ViewState": "AgIAADERAAAAAAAAAAAswDgRAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-02-20T00:09:20.838Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }
