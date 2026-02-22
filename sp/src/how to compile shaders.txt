@@ -1,0 +1,1 @@
+ShaderCompile.exe [OPTIONS] -ver 30 -shaderdir src_dir shader.fxc

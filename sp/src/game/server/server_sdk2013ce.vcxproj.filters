@@ -1790,6 +1790,9 @@
     <ClInclude Include="toolframework_server.h">
       <Filter>Tools Framework</Filter>
     </ClInclude>
+    <ClInclude Include="hl2\npc_cremator.h">
+      <Filter>Source Files\HL2 DLL\unused</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gamedll_replay.cpp">
@@ -3513,6 +3516,12 @@
     </ClCompile>
     <ClCompile Include="toolframework_server.cpp">
       <Filter>Tools Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="hl2\npc_combineguard.cpp">
+      <Filter>Source Files\HL2 DLL\unused</Filter>
+    </ClCompile>
+    <ClCompile Include="hl2\npc_cremator.cpp">
+      <Filter>Source Files\HL2 DLL\unused</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
