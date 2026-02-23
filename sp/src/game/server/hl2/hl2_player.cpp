@@ -109,7 +109,7 @@ ConVar sv_stickysprint("sv_stickysprint", "0", FCVAR_ARCHIVE | FCVAR_ARCHIVE_XBO
 
 #define	FLASH_DRAIN_TIME	 1.1111	// 100 units / 90 secs
 #define	FLASH_CHARGE_TIME	 50.0f	// 100 units / 2 secs
-#define PLAYER_MODEL "models/humans/group01/male_01.mdl"
+#define PLAYER_MODEL "models/hl2/characters/gordon.mdl"
 
 
 //==============================================================================================

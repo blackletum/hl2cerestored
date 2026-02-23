@@ -2,7 +2,7 @@
 //
 // Purpose:		Stun Stick- beating stick with a zappy end
 //
-// $NoKeywords: $
+// $NoKeywords: $FixedByTheMaster974
 //=============================================================================//
 
 #include "cbase.h"
@@ -10,12 +10,20 @@
 #include "npc_metropolice.h"
 #include "weapon_stunstick.h"
 #include "IEffects.h"
+#include "in_buttons.h" // Addition.
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-ConVar    sk_plr_dmg_stunstick	( "sk_plr_dmg_stunstick","0");
-ConVar    sk_npc_dmg_stunstick	( "sk_npc_dmg_stunstick","0");
+ConVar    sk_plr_dmg_stunstick("sk_plr_dmg_stunstick", "0");
+ConVar    sk_npc_dmg_stunstick("sk_npc_dmg_stunstick", "0");
+
+// -------------------------------------------------------------------------------
+// This keeps track of whether or not the player is in possession of a Stunstick.
+// If the player has a Stunstick, gives the player a suit battery. This is set as
+// a hidden ConVar, so players can't really change it (unless they know the name).
+// -------------------------------------------------------------------------------
+ConVar	  does_player_have_stunstick("does_player_have_stunstick", "0", FCVAR_HIDDEN, "Internal variable to keep track of the player's ownership of a stunstick.");
 
 extern ConVar metropolice_move_and_melee;
 
@@ -24,15 +32,16 @@ extern ConVar metropolice_move_and_melee;
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_SERVERCLASS_ST(CWeaponStunStick, DT_WeaponStunStick)
-	SendPropInt( SENDINFO( m_bActive ), 1, SPROP_UNSIGNED ),
+SendPropInt(SENDINFO(m_bActive), 1, SPROP_UNSIGNED),
+SendPropInt(SENDINFO(m_bInSwing), 1, SPROP_UNSIGNED), // Addition.
 END_SEND_TABLE()
 
 #ifndef HL2MP
-LINK_ENTITY_TO_CLASS( weapon_stunstick, CWeaponStunStick );
-PRECACHE_WEAPON_REGISTER( weapon_stunstick );
+LINK_ENTITY_TO_CLASS(weapon_stunstick, CWeaponStunStick);
+PRECACHE_WEAPON_REGISTER(weapon_stunstick);
 #endif
 
-acttable_t CWeaponStunStick::m_acttable[] = 
+acttable_t CWeaponStunStick::m_acttable[] =
 {
 	{ ACT_MELEE_ATTACK1,	ACT_MELEE_ATTACK_SWING,	true },
 	{ ACT_IDLE_ANGRY,		ACT_IDLE_ANGRY_MELEE,	true },
@@ -41,22 +50,39 @@ acttable_t CWeaponStunStick::m_acttable[] =
 IMPLEMENT_ACTTABLE(CWeaponStunStick);
 
 
-BEGIN_DATADESC( CWeaponStunStick )
+BEGIN_DATADESC(CWeaponStunStick)
 
-	DEFINE_FIELD( m_bActive, FIELD_BOOLEAN ),
+DEFINE_FIELD(m_bActive, FIELD_BOOLEAN),
+DEFINE_FIELD(m_bInSwing, FIELD_BOOLEAN), // Addition.
 
 END_DATADESC()
 
+// ----------------------------------------------------------------------------------
+// Materials for the glow effect are defined here, as they will need to be precached.
+// ----------------------------------------------------------------------------------
 
+#define	STUNSTICK_BEAM_MATERIAL		"sprites/lgtning.vmt"
+#define STUNSTICK_GLOW_MATERIAL		"sprites/light_glow02_add.vmt"
+#define STUNSTICK_GLOW_MATERIAL2	"effects/blueflare1.vmt"
+#define STUNSTICK_GLOW_MATERIAL_NOZ	"sprites/light_glow02_add_noz.vmt"
 
 //-----------------------------------------------------------------------------
 // Constructor
 //-----------------------------------------------------------------------------
-CWeaponStunStick::CWeaponStunStick( void )
+CWeaponStunStick::CWeaponStunStick(void)
 {
 	// HACK:  Don't call SetStunState because this tried to Emit a sound before
 	//  any players are connected which is a bug
 	m_bActive = false;
+	m_bInSwing = false; // Addition.
+}
+
+// ----------
+// Destructor
+// ----------
+CWeaponStunStick::~CWeaponStunStick(void)
+{
+	does_player_have_stunstick.SetValue(0); // The player doesn't have a Stunstick by default.
 }
 
 //-----------------------------------------------------------------------------
@@ -67,16 +93,23 @@ void CWeaponStunStick::Spawn()
 
 
 	BaseClass::Spawn();
-	AddSolidFlags( FSOLID_NOT_STANDABLE );
+	AddSolidFlags(FSOLID_NOT_STANDABLE);
 }
 
 void CWeaponStunStick::Precache()
 {
 	BaseClass::Precache();
 
-	PrecacheScriptSound( "Weapon_StunStick.Activate" );
-	PrecacheScriptSound( "Weapon_StunStick.Deactivate" );
+	PrecacheScriptSound("Weapon_StunStick.Activate");
+	PrecacheScriptSound("Weapon_StunStick.Deactivate");
 
+	// ----------
+	// Additions.
+	// ----------
+	PrecacheModel(STUNSTICK_BEAM_MATERIAL);
+	PrecacheModel(STUNSTICK_GLOW_MATERIAL);
+	PrecacheModel(STUNSTICK_GLOW_MATERIAL2);
+	PrecacheModel(STUNSTICK_GLOW_MATERIAL_NOZ);
 }
 
 //-----------------------------------------------------------------------------
@@ -84,11 +117,11 @@ void CWeaponStunStick::Precache()
 // Input  : hitActivity - currently played activity
 // Output : Damage amount
 //-----------------------------------------------------------------------------
-float CWeaponStunStick::GetDamageForActivity( Activity hitActivity )
+float CWeaponStunStick::GetDamageForActivity(Activity hitActivity)
 {
-	if ( ( GetOwner() != NULL ) && ( GetOwner()->IsPlayer() ) )
+	if ((GetOwner() != NULL) && (GetOwner()->IsPlayer()))
 		return sk_plr_dmg_stunstick.GetFloat();
-	
+
 	return sk_npc_dmg_stunstick.GetFloat();
 }
 
@@ -97,46 +130,46 @@ float CWeaponStunStick::GetDamageForActivity( Activity hitActivity )
 //-----------------------------------------------------------------------------
 extern ConVar sk_crowbar_lead_time;
 
-int CWeaponStunStick::WeaponMeleeAttack1Condition( float flDot, float flDist )
+int CWeaponStunStick::WeaponMeleeAttack1Condition(float flDot, float flDist)
 {
 	// Attempt to lead the target (needed because citizens can't hit manhacks with the crowbar!)
-	CAI_BaseNPC *pNPC	= GetOwner()->MyNPCPointer();
-	CBaseEntity *pEnemy = pNPC->GetEnemy();
+	CAI_BaseNPC* pNPC = GetOwner()->MyNPCPointer();
+	CBaseEntity* pEnemy = pNPC->GetEnemy();
 	if (!pEnemy)
 		return COND_NONE;
 
 	Vector vecVelocity;
 	AngularImpulse angVelocity;
-	pEnemy->GetVelocity( &vecVelocity, &angVelocity );
+	pEnemy->GetVelocity(&vecVelocity, &angVelocity);
 
 	// Project where the enemy will be in a little while, add some randomness so he doesn't always hit
 	float dt = sk_crowbar_lead_time.GetFloat();
-	dt += random->RandomFloat( -0.3f, 0.2f );
-	if ( dt < 0.0f )
+	dt += random->RandomFloat(-0.3f, 0.2f);
+	if (dt < 0.0f)
 		dt = 0.0f;
 
 	Vector vecExtrapolatedPos;
-	VectorMA( pEnemy->WorldSpaceCenter(), dt, vecVelocity, vecExtrapolatedPos );
+	VectorMA(pEnemy->WorldSpaceCenter(), dt, vecVelocity, vecExtrapolatedPos);
 
 	Vector vecDelta;
-	VectorSubtract( vecExtrapolatedPos, pNPC->WorldSpaceCenter(), vecDelta );
+	VectorSubtract(vecExtrapolatedPos, pNPC->WorldSpaceCenter(), vecDelta);
 
-	if ( fabs( vecDelta.z ) > 70 )
+	if (fabs(vecDelta.z) > 70)
 	{
 		return COND_TOO_FAR_TO_ATTACK;
 	}
 
-	Vector vecForward = pNPC->BodyDirection2D( );
+	Vector vecForward = pNPC->BodyDirection2D();
 	vecDelta.z = 0.0f;
-	float flExtrapolatedDot = DotProduct2D( vecDelta.AsVector2D(), vecForward.AsVector2D() );
+	float flExtrapolatedDot = DotProduct2D(vecDelta.AsVector2D(), vecForward.AsVector2D());
 	if ((flDot < 0.7) && (flExtrapolatedDot < 0.7))
 	{
 		return COND_NOT_FACING_ATTACK;
 	}
 
-	float flExtrapolatedDist = Vector2DNormalize( vecDelta.AsVector2D() );
+	float flExtrapolatedDist = Vector2DNormalize(vecDelta.AsVector2D());
 
-	if( pEnemy->IsPlayer() )
+	if (pEnemy->IsPlayer())
 	{
 		//Vector vecDir = pEnemy->GetSmoothedVelocity();
 		//float flSpeed = VectorNormalize( vecDir );
@@ -145,20 +178,20 @@ int CWeaponStunStick::WeaponMeleeAttack1Condition( float flDot, float flDist )
 		Vector vecProjectEnemy = pEnemy->GetAbsOrigin() + (pEnemy->GetAbsVelocity() * 0.35);
 		Vector vecProjectMe = GetAbsOrigin();
 
-		if( (vecProjectMe - vecProjectEnemy).Length2D() <= 48.0f )
+		if ((vecProjectMe - vecProjectEnemy).Length2D() <= 48.0f)
 		{
 			return COND_CAN_MELEE_ATTACK1;
 		}
 	}
-/*
-	if( metropolice_move_and_melee.GetBool() )
-	{
-		if( pNPC->IsMoving() )
+	/*
+		if( metropolice_move_and_melee.GetBool() )
 		{
-			flTargetDist *= 1.5f;
+			if( pNPC->IsMoving() )
+			{
+				flTargetDist *= 1.5f;
+			}
 		}
-	}
-*/
+	*/
 	float flTargetDist = 48.0f;
 	if ((flDist > flTargetDist) && (flExtrapolatedDist > flTargetDist))
 	{
@@ -168,162 +201,163 @@ int CWeaponStunStick::WeaponMeleeAttack1Condition( float flDot, float flDist )
 	return COND_CAN_MELEE_ATTACK1;
 }
 
-
+/*
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose: Removed!
 //-----------------------------------------------------------------------------
 void CWeaponStunStick::ImpactEffect( trace_t &traceHit )
 {
 	//Glowing spark effect for hit
 	//UTIL_DecalTrace( &m_trLineHit, "PlasmaGlowFade" );
-	
+
 	//FIXME: need new decals
 	UTIL_ImpactTrace( &traceHit, DMG_CLUB );
 }
+*/
 
-void CWeaponStunStick::Operator_HandleAnimEvent( animevent_t *pEvent, CBaseCombatCharacter *pOperator )
+void CWeaponStunStick::Operator_HandleAnimEvent(animevent_t* pEvent, CBaseCombatCharacter* pOperator)
 {
-	switch( pEvent->event )
+	switch (pEvent->event)
 	{
-		case EVENT_WEAPON_MELEE_HIT:
+	case EVENT_WEAPON_MELEE_HIT:
+	{
+		// Trace up or down based on where the enemy is...
+		// But only if we're basically facing that direction
+		Vector vecDirection;
+		AngleVectors(GetAbsAngles(), &vecDirection);
+
+		CBaseEntity* pEnemy = pOperator->MyNPCPointer() ? pOperator->MyNPCPointer()->GetEnemy() : NULL;
+		if (pEnemy)
 		{
-			// Trace up or down based on where the enemy is...
-			// But only if we're basically facing that direction
-			Vector vecDirection;
-			AngleVectors( GetAbsAngles(), &vecDirection );
+			Vector vecDelta;
+			VectorSubtract(pEnemy->WorldSpaceCenter(), pOperator->Weapon_ShootPosition(), vecDelta);
+			VectorNormalize(vecDelta);
 
-			CBaseEntity *pEnemy = pOperator->MyNPCPointer() ? pOperator->MyNPCPointer()->GetEnemy() : NULL;
-			if ( pEnemy )
+			Vector2D vecDelta2D = vecDelta.AsVector2D();
+			Vector2DNormalize(vecDelta2D);
+			if (DotProduct2D(vecDelta2D, vecDirection.AsVector2D()) > 0.8f)
 			{
-				Vector vecDelta;
-				VectorSubtract( pEnemy->WorldSpaceCenter(), pOperator->Weapon_ShootPosition(), vecDelta );
-				VectorNormalize( vecDelta );
-				
-				Vector2D vecDelta2D = vecDelta.AsVector2D();
-				Vector2DNormalize( vecDelta2D );
-				if ( DotProduct2D( vecDelta2D, vecDirection.AsVector2D() ) > 0.8f )
-				{
-					vecDirection = vecDelta;
-				}
-			}
-
-			Vector vecEnd;
-			VectorMA( pOperator->Weapon_ShootPosition(), 32, vecDirection, vecEnd );
-			// Stretch the swing box down to catch low level physics objects
-			CBaseEntity *pHurt = pOperator->CheckTraceHullAttack( pOperator->Weapon_ShootPosition(), vecEnd, 
-				Vector(-16,-16,-40), Vector(16,16,16), GetDamageForActivity( GetActivity() ), DMG_CLUB, 0.5f, false );
-			
-			// did I hit someone?
-			if ( pHurt )
-			{
-				// play sound
-				WeaponSound( MELEE_HIT );
-
-				CBasePlayer *pPlayer = ToBasePlayer( pHurt );
-
-				CNPC_MetroPolice *pCop = dynamic_cast<CNPC_MetroPolice *>(pOperator);
-				bool bFlashed = false;
-
-				if ( pCop != NULL && pPlayer != NULL )
-				{
-					// See if we need to knock out this target
-					if ( pCop->ShouldKnockOutTarget( pHurt ) )
-					{
-						float yawKick = random->RandomFloat( -48, -24 );
-
-						//Kick the player angles
-						pPlayer->ViewPunch( QAngle( -16, yawKick, 2 ) );
-
-						color32 white = {255,255,255,255};
-						UTIL_ScreenFade( pPlayer, white, 0.2f, 1.0f, FFADE_OUT|FFADE_PURGE|FFADE_STAYOUT );
-						bFlashed = true;
-						
-						pCop->KnockOutTarget( pHurt );
-
-						break;
-					}
-					else
-					{
-						// Notify that we've stunned a target
-						pCop->StunnedTarget( pHurt );
-					}
-				}
-				
-				// Punch angles
-				if ( pPlayer != NULL && !(pPlayer->GetFlags() & FL_GODMODE) )
-				{
-					float yawKick = random->RandomFloat( -48, -24 );
-
-					//Kick the player angles
-					pPlayer->ViewPunch( QAngle( -16, yawKick, 2 ) );
-
-					Vector	dir = pHurt->GetAbsOrigin() - GetAbsOrigin();
-
-					// If the player's on my head, don't knock him up
-					if ( pPlayer->GetGroundEntity() == pOperator )
-					{
-						dir = vecDirection;
-						dir.z = 0;
-					}
-
-					VectorNormalize(dir);
-
-					dir *= 500.0f;
-
-					//If not on ground, then don't make them fly!
-					if ( !(pPlayer->GetFlags() & FL_ONGROUND ) )
-						 dir.z = 0.0f;
-
-					//Push the target back
-					pHurt->ApplyAbsVelocityImpulse( dir );
-
-					if ( !bFlashed )
-					{
-						color32 red = {128,0,0,128};
-						UTIL_ScreenFade( pPlayer, red, 0.5f, 0.1f, FFADE_IN );
-					}
-					
-					// Force the player to drop anyting they were holding
-					pPlayer->ForceDropOfCarriedPhysObjects();
-				}
-				
-				// do effect?
-			}
-			else
-			{
-				WeaponSound( MELEE_MISS );
+				vecDirection = vecDelta;
 			}
 		}
+
+		Vector vecEnd;
+		VectorMA(pOperator->Weapon_ShootPosition(), 32, vecDirection, vecEnd);
+		// Stretch the swing box down to catch low level physics objects
+		CBaseEntity* pHurt = pOperator->CheckTraceHullAttack(pOperator->Weapon_ShootPosition(), vecEnd,
+			Vector(-16, -16, -40), Vector(16, 16, 16), GetDamageForActivity(GetActivity()), DMG_CLUB, 0.5f, false);
+
+		// did I hit someone?
+		if (pHurt)
+		{
+			// play sound
+			WeaponSound(MELEE_HIT);
+
+			CBasePlayer* pPlayer = ToBasePlayer(pHurt);
+
+			CNPC_MetroPolice* pCop = dynamic_cast<CNPC_MetroPolice*>(pOperator);
+			bool bFlashed = false;
+
+			if (pCop != NULL && pPlayer != NULL)
+			{
+				// See if we need to knock out this target
+				if (pCop->ShouldKnockOutTarget(pHurt))
+				{
+					float yawKick = random->RandomFloat(-48, -24);
+
+					//Kick the player angles
+					pPlayer->ViewPunch(QAngle(-16, yawKick, 2));
+
+					color32 white = { 255,255,255,255 };
+					UTIL_ScreenFade(pPlayer, white, 0.2f, 1.0f, FFADE_OUT | FFADE_PURGE | FFADE_STAYOUT);
+					bFlashed = true;
+
+					pCop->KnockOutTarget(pHurt);
+
+					break;
+				}
+				else
+				{
+					// Notify that we've stunned a target
+					pCop->StunnedTarget(pHurt);
+				}
+			}
+
+			// Punch angles
+			if (pPlayer != NULL && !(pPlayer->GetFlags() & FL_GODMODE))
+			{
+				float yawKick = random->RandomFloat(-48, -24);
+
+				//Kick the player angles
+				pPlayer->ViewPunch(QAngle(-16, yawKick, 2));
+
+				Vector	dir = pHurt->GetAbsOrigin() - GetAbsOrigin();
+
+				// If the player's on my head, don't knock him up
+				if (pPlayer->GetGroundEntity() == pOperator)
+				{
+					dir = vecDirection;
+					dir.z = 0;
+				}
+
+				VectorNormalize(dir);
+
+				dir *= 500.0f;
+
+				//If not on ground, then don't make them fly!
+				if (!(pPlayer->GetFlags() & FL_ONGROUND))
+					dir.z = 0.0f;
+
+				//Push the target back
+				pHurt->ApplyAbsVelocityImpulse(dir);
+
+				if (!bFlashed)
+				{
+					color32 red = { 128,0,0,128 };
+					UTIL_ScreenFade(pPlayer, red, 0.5f, 0.1f, FFADE_IN);
+				}
+
+				// Force the player to drop anyting they were holding
+				pPlayer->ForceDropOfCarriedPhysObjects();
+			}
+
+			// do effect?
+		}
+		else
+		{
+			WeaponSound(MELEE_MISS);
+		}
+	}
+	break;
+	default:
+		BaseClass::Operator_HandleAnimEvent(pEvent, pOperator);
 		break;
-		default:
-			BaseClass::Operator_HandleAnimEvent( pEvent, pOperator );
-			break;
 	}
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Sets the state of the stun stick
 //-----------------------------------------------------------------------------
-void CWeaponStunStick::SetStunState( bool state )
+void CWeaponStunStick::SetStunState(bool state)
 {
 	m_bActive = state;
 
-	if ( m_bActive )
+	if (m_bActive)
 	{
 		//FIXME: START - Move to client-side
 
 		Vector vecAttachment;
 
-		GetAttachment( 1, vecAttachment );
-		g_pEffects->Sparks( vecAttachment );
+		GetAttachment(1, vecAttachment);
+		g_pEffects->Sparks(vecAttachment);
 
 		//FIXME: END - Move to client-side
 
-		EmitSound( "Weapon_StunStick.Activate" );
+		EmitSound("Weapon_StunStick.Activate");
 	}
 	else
 	{
-		EmitSound( "Weapon_StunStick.Deactivate" );
+		EmitSound("Weapon_StunStick.Deactivate");
 	}
 }
 
@@ -331,23 +365,23 @@ void CWeaponStunStick::SetStunState( bool state )
 // Purpose: 
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CWeaponStunStick::Deploy( void )
+bool CWeaponStunStick::Deploy(void)
 {
-	SetStunState( true );
-
+	SetStunState(true);
+	m_bInSwing = false; // Addition.
 	return BaseClass::Deploy();
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-bool CWeaponStunStick::Holster( CBaseCombatWeapon *pSwitchingTo )
+bool CWeaponStunStick::Holster(CBaseCombatWeapon* pSwitchingTo)
 {
-	if ( BaseClass::Holster( pSwitchingTo ) == false )
+	if (BaseClass::Holster(pSwitchingTo) == false)
 		return false;
 
-	SetStunState( false );
-
+	SetStunState(false);
+	m_bInSwing = false; // Addition.
 	return true;
 }
 
@@ -355,18 +389,86 @@ bool CWeaponStunStick::Holster( CBaseCombatWeapon *pSwitchingTo )
 // Purpose: 
 // Input  : &vecVelocity - 
 //-----------------------------------------------------------------------------
-void CWeaponStunStick::Drop( const Vector &vecVelocity )
+void CWeaponStunStick::Drop(const Vector& vecVelocity)
 {
-	SetStunState( false );
+	SetStunState(false);
 
-	BaseClass::Drop( vecVelocity );
+	// ----------
+	// Additions.
+	// ----------
+	m_bInSwing = false; // We are not swinging.
+	CBasePlayer* pPlayer = ToBasePlayer(GetOwner()); // Find the player.
+	if (pPlayer)
+		does_player_have_stunstick.SetValue(0); // If we have a player, they don't have a Stunstick.
+
+	BaseClass::Drop(vecVelocity);
+}
+
+// ----------------------------------------------------
+// What happens when a player is on top of a Stunstick?
+// ----------------------------------------------------
+void CWeaponStunStick::Equip(CBaseCombatCharacter* pOwner)
+{
+	bool stunCheck = does_player_have_stunstick.GetBool(); // Get the value of the Stunstick check ConVar.
+	if (!stunCheck)
+		does_player_have_stunstick.SetValue(1); // If the value is 0, set it to 1.
+
+	BaseClass::Equip(pOwner); // Run standard Equip code.
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: 
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CWeaponStunStick::GetStunState( void )
+bool CWeaponStunStick::GetStunState(void)
 {
 	return m_bActive;
+}
+
+// ----------
+// Additions.
+// ----------
+
+void CWeaponStunStick::PrimaryAttack(void)
+{
+	m_bInSwing = true; // If we are attacking, we are in the middle of a swing.
+	BaseClass::PrimaryAttack(); // Run standard PrimaryAttack code.
+}
+
+void CWeaponStunStick::ItemPostFrame(void)
+{
+	CBasePlayer* pOwner = ToBasePlayer(GetOwner()); // Find the player.
+	if (pOwner == NULL)
+		return;
+
+	does_player_have_stunstick.SetValue(1); // Always set the value of the Stunstick check ConVar to 1 if the player has a Stunstick.
+
+	if ((pOwner->m_nButtons & IN_ATTACK) && (m_flNextPrimaryAttack <= gpGlobals->curtime))
+	{
+		PrimaryAttack(); // Do an attack if the attack button was pressed or is being held.
+	}
+	else
+	{
+		WeaponIdle(); // Otherwise, we can idle.
+		m_bInSwing = false; // Also, we are not in the middle of a swing!
+		return;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Add in a view kick for this weapon
+//-----------------------------------------------------------------------------
+void CWeaponStunStick::AddViewKick(void)
+{
+	CBasePlayer* pPlayer = ToBasePlayer(GetOwner()); // Find the player.
+	if (pPlayer == NULL)
+		return;
+
+	QAngle punchAng; // Create a stock QAngle and give it some random values.
+
+	punchAng.x = random->RandomFloat(1.0f, 2.0f);
+	punchAng.y = random->RandomFloat(-2.0f, -1.0f);
+	punchAng.z = 0.0f;
+
+	pPlayer->ViewPunch(punchAng); // Apply some recoil to the player, using the random QAngle.
 }
