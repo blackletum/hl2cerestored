@@ -1,0 +1,6 @@
+^C:\GITHUB\HL2CERESTORED\SP\SRC\PUBLIC\TIER0\POINTEROVERRIDE.ASM
+"C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\HostX64\x86\ml.exe" /safeseh /c /Cp /Zi /Fo".\Release_mod_sdk2013ce\\pointeroverride.obj" "C:\GitHub\hl2cerestored\sp\src\public\tier0\pointeroverride.asm"
+^C:\GITHUB\HL2CERESTORED\SP\SRC\GAME\SERVER\SERVER_SDK2013CE.VPC
+if exist "..\..\devtools\bin\vpc.exe" "..\..\devtools\bin\vpc.exe" -crc2 "server_sdk2013ce.vcxproj"
+if ERRORLEVEL 1 exit /b 1
+echo crc_complete > C:\GitHub\hl2cerestored\sp\src\game\server\server_sdk2013ce.vpc.sentinel

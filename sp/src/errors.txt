@@ -1,0 +1,2 @@
+Severity	Code	Description	Project	File	Line	Suppression State	Details
+Warning	C4189	'pGun': local variable is initialized but not referenced	Server	C:\GitHub\hl2cerestored\sp\src\game\server\hl2\npc_cremator.cpp	276		

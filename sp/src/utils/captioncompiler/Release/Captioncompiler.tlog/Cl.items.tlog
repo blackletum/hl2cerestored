@@ -1,0 +1,10 @@
+C:\GitHub\hl2cerestored\sp\src\utils\common\cmdlib.cpp;C:\GitHub\hl2cerestored\sp\src\utils\captioncompiler\Release\cmdlib.obj
+C:\GitHub\hl2cerestored\sp\src\public\filesystem_helpers.cpp;C:\GitHub\hl2cerestored\sp\src\utils\captioncompiler\Release\filesystem_helpers.obj
+C:\GitHub\hl2cerestored\sp\src\public\filesystem_init.cpp;C:\GitHub\hl2cerestored\sp\src\utils\captioncompiler\Release\filesystem_init.obj
+C:\GitHub\hl2cerestored\sp\src\utils\common\pacifier.cpp;C:\GitHub\hl2cerestored\sp\src\utils\captioncompiler\Release\pacifier.obj
+C:\GitHub\hl2cerestored\sp\src\utils\common\scriplib.cpp;C:\GitHub\hl2cerestored\sp\src\utils\captioncompiler\Release\scriplib.obj
+C:\GitHub\hl2cerestored\sp\src\public\stringregistry.cpp;C:\GitHub\hl2cerestored\sp\src\utils\captioncompiler\Release\stringregistry.obj
+C:\GitHub\hl2cerestored\sp\src\utils\captioncompiler\captioncompiler.cpp;C:\GitHub\hl2cerestored\sp\src\utils\captioncompiler\Release\captioncompiler.obj
+C:\GitHub\hl2cerestored\sp\src\common\compiledcaptionswap.cpp;C:\GitHub\hl2cerestored\sp\src\utils\captioncompiler\Release\compiledcaptionswap.obj
+C:\GitHub\hl2cerestored\sp\src\utils\common\filesystem_tools.cpp;C:\GitHub\hl2cerestored\sp\src\utils\captioncompiler\Release\filesystem_tools.obj
+C:\GitHub\hl2cerestored\sp\src\public\tier0\memoverride.cpp;C:\GitHub\hl2cerestored\sp\src\utils\captioncompiler\Release\memoverride.obj

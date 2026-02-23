@@ -1820,6 +1820,9 @@
     <ClInclude Include="viewpostprocess.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="worldlight.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
     <ClInclude Include="game_controls\basemodel_panel.h">
       <Filter>Source Files\game_controls</Filter>
     </ClInclude>
@@ -1891,9 +1894,6 @@
     </ClInclude>
     <ClInclude Include="toolframework_client.h">
       <Filter>Tool Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="worldlight.h">
-      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2932,6 +2932,9 @@
     <ClCompile Include="WorldDimsProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="worldlight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="game_controls\basemodel_panel.cpp">
       <Filter>Source Files\game_controls</Filter>
     </ClCompile>
@@ -3417,9 +3420,6 @@
     </ClCompile>
     <ClCompile Include="toolframework_client.cpp">
       <Filter>Tool Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="worldlight.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

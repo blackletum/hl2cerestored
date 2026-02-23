@@ -1,0 +1,11 @@
+﻿  Compiling pointeroverride.asm
+  Microsoft (R) Macro Assembler Version 14.50.35724.0
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+   Assembling: C:\GitHub\hl2cerestored\sp\src\public\tier0\pointeroverride.asm
+  Running VPC CRC Check - tgadiff.vpc
+  memoverride.cpp
+  tgadiff.cpp
+     Creating library .\Release\.\tgadiff.lib and object .\Release\.\tgadiff.exp
+  tgadiff.vcxproj -> C:\GitHub\hl2cerestored\sp\src\utils\tgadiff\Release\tgadiff.exe
+  Publishing to ..\..\..\game\bin\.

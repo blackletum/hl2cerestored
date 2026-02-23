@@ -1,7 +1,7 @@
 [vpc crc file version 2]
 57ace564 C:\GitHub\hl2cerestored\sp\src\devtools\bin\vpc.exe
 _Nc_VS2013/vpcgame:sdk2013ce_
-23df9d2c server_sdk2013ce.vpc
+8ed22462 server_sdk2013ce.vpc
 cd2921c2 ..\..\game\server\server_base.vpc
 4832e67a ..\..\vpc_scripts\source_dll_base.vpc
 d752cf80 ..\..\vpc_scripts\platform_dirs.vpc

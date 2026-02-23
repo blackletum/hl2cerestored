@@ -3,20 +3,8 @@
   "WorkspaceRootPath": "C:\\GitHub\\hl2cerestored\\sp\\src\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F01B37EF-3E7B-2466-5DB8-DA5641CAB74A}|game\\server\\server_sdk2013ce.vcxproj|C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\hl2\\weapon_pistol.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{F01B37EF-3E7B-2466-5DB8-DA5641CAB74A}|game\\server\\server_sdk2013ce.vcxproj|solutionrelative:game\\server\\hl2\\weapon_pistol.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{250680C8-D8F0-D2D6-2B3E-AB2A1E90DE08}|game\\client\\client_sdk2013ce.vcxproj|C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\hl2\\c_weapon_stunstick.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{250680C8-D8F0-D2D6-2B3E-AB2A1E90DE08}|game\\client\\client_sdk2013ce.vcxproj|solutionrelative:game\\client\\hl2\\c_weapon_stunstick.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F01B37EF-3E7B-2466-5DB8-DA5641CAB74A}|game\\server\\server_sdk2013ce.vcxproj|C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\hl2\\weapon_stunstick.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{F01B37EF-3E7B-2466-5DB8-DA5641CAB74A}|game\\server\\server_sdk2013ce.vcxproj|solutionrelative:game\\server\\hl2\\weapon_stunstick.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F01B37EF-3E7B-2466-5DB8-DA5641CAB74A}|game\\server\\server_sdk2013ce.vcxproj|C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\hl2\\weapon_stunstick.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{F01B37EF-3E7B-2466-5DB8-DA5641CAB74A}|game\\server\\server_sdk2013ce.vcxproj|solutionrelative:game\\server\\hl2\\weapon_stunstick.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{F01B37EF-3E7B-2466-5DB8-DA5641CAB74A}|game\\server\\server_sdk2013ce.vcxproj|C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\hl2\\npc_cremator.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{F01B37EF-3E7B-2466-5DB8-DA5641CAB74A}|game\\server\\server_sdk2013ce.vcxproj|solutionrelative:game\\server\\hl2\\npc_cremator.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,53 +19,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "weapon_pistol.cpp",
-              "DocumentMoniker": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\hl2\\weapon_pistol.cpp",
-              "RelativeDocumentMoniker": "game\\server\\hl2\\weapon_pistol.cpp",
-              "ToolTip": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\hl2\\weapon_pistol.cpp",
-              "RelativeToolTip": "game\\server\\hl2\\weapon_pistol.cpp",
-              "ViewState": "AgIAAK4AAAAAAAAAAAAAALYAAAAXAAAAAAAAAA==",
+              "Title": "npc_cremator.cpp",
+              "DocumentMoniker": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\hl2\\npc_cremator.cpp",
+              "RelativeDocumentMoniker": "game\\server\\hl2\\npc_cremator.cpp",
+              "ToolTip": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\hl2\\npc_cremator.cpp",
+              "RelativeToolTip": "game\\server\\hl2\\npc_cremator.cpp",
+              "ViewState": "AgIAAAYBAAAAAAAAAAAcwBEBAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-02-23T05:17:15.801Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "c_weapon_stunstick.cpp",
-              "DocumentMoniker": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\hl2\\c_weapon_stunstick.cpp",
-              "RelativeDocumentMoniker": "game\\client\\hl2\\c_weapon_stunstick.cpp",
-              "ToolTip": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\client\\hl2\\c_weapon_stunstick.cpp",
-              "RelativeToolTip": "game\\client\\hl2\\c_weapon_stunstick.cpp",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAADsCAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-02-23T04:10:00.337Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "weapon_stunstick.cpp",
-              "DocumentMoniker": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\hl2\\weapon_stunstick.cpp",
-              "RelativeDocumentMoniker": "game\\server\\hl2\\weapon_stunstick.cpp",
-              "ToolTip": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\hl2\\weapon_stunstick.cpp",
-              "RelativeToolTip": "game\\server\\hl2\\weapon_stunstick.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAOwAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-02-23T03:34:07.754Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "weapon_stunstick.h",
-              "DocumentMoniker": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\hl2\\weapon_stunstick.h",
-              "RelativeDocumentMoniker": "game\\server\\hl2\\weapon_stunstick.h",
-              "ToolTip": "C:\\GitHub\\hl2cerestored\\sp\\src\\game\\server\\hl2\\weapon_stunstick.h",
-              "RelativeToolTip": "game\\server\\hl2\\weapon_stunstick.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-02-23T03:49:05.158Z",
+              "WhenOpened": "2026-02-23T21:27:09.995Z",
               "EditorCaption": ""
             }
           ]
